@@ -9,9 +9,12 @@ while True:
 	c, addr = serversocket.accept()
 	print 'Connected to ', addr
 	msg = c.recv(4096)
-	print msg
 	if msg == "ls":
 		print os.listdir(currDirectory)
 	if msg == "cd":
 		currDirectory = c.recv(4096)
 		print os.listdir(currDirectory)
+	if msg == "mkdir":
+		toAdd = c.recv(4096)
+		newDir = currDirectory + "/" + toAdd
+		os.mkdir(newDir)

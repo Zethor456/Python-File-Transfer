@@ -9,3 +9,6 @@ if cmd[0] == "ls":
 if cmd[0] == "cd":
     socket.send(cmd[0])
     socket.send(cmd[1])
+if cmd[0] == "mkdir":
+    socket.send(cmd[0])
+    socket.send(cmd[1])
