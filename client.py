@@ -12,3 +12,31 @@ if cmd[0] == "cd":
 if cmd[0] == "mkdir":
     socket.send(cmd[0])
     socket.send(cmd[1])
+if cmd[0] == "get":
+	socket.send(cmd[0])
+	print(cmd[0])
+	socket.send(cmd[1])
+	print(cmd[1])
+	f = open("other.txt","wb")
+	chunk = socket.recv(4096)
+	while(chunk):
+		print("got stuff")
+		print(chunk)
+		f.write(chunk)
+		chunk = socket.recv(4096)
+	f.close()
+	socket.recv(4096);
+	socket.close
+if cmd[0] == "put":
+	socket.send(cmd[0])
+	socket.send(cmd[1])
+	f = open("Test.txt","r")
+	chunk = f.read(4096)
+	while(chunk):
+		socket.send(chunk)
+		print("sent stuff")
+		chunk = f.read(4096)
+	f.close	
+	#socket.shutdown(socket.SHUT_WR)
+	print socket.recv(4096)
+	socket.close
