@@ -1,6 +1,7 @@
 import socket
 import os
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 serversocket.bind(('localhost',4040))
 serversocket.listen(5)
 
@@ -10,10 +11,16 @@ while True:
 	print 'Connected to ', addr
 	msg = c.recv(4096)
 	if msg == "ls":
-		print os.listdir(currDirectory)
+		lsDir = os.listdir(currDirectory)
+		string = '\n'.join(lsDir)
+		c.send(string)
+		c.close()
 	if msg == "cd":
 		currDirectory = c.recv(4096)
-		print os.listdir(currDirectory)
+		lsDir = os.listdir(currDirectory)
+		string = '\n'.join(lsDir)
+		c.send(string)
+		c.close()
 	if msg == "mkdir":
 		toAdd = c.recv(4096)
 		newDir = currDirectory + "/" + toAdd
@@ -25,9 +32,9 @@ while True:
 		while(chunk):
 			print("sent stuff")
 			c.send(chunk)
-			
+
 			chunk = sentfile.read(4096)
-		sentfile.close	
+		sentfile.close
 		c.shutdown(socket.SHUT_WR)
 		print c.recv(4096)
 		c.close
@@ -44,4 +51,4 @@ while True:
 			chunk = c.recv(4096)
 		f.close()
 		c.recv(1024);
-		c.close	
+		c.close
