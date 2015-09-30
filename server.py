@@ -11,6 +11,7 @@ while True:
 	print 'Connected to ', addr
 	running = True
 	while running:
+		c.send(os.getcwd())
 		raw_msg = c.recv(4096)
 		msg = raw_msg.split()
 		cmd = msg[0]
@@ -26,7 +27,6 @@ while True:
 		elif cmd == "cd":
 			target = msg[1]
 			os.chdir(target)
-			print os.getcwd()
 		elif cmd == "mkdir":
 			target = msg[1]
 			newDir = os.getcwd() + "/" + target
@@ -38,16 +38,20 @@ while True:
 			while(chunk):
 				print("sending stuff")
 				c.send(chunk)
+				if c.recv(4096) != "ACK":
+					print "Failed transfer"
 				chunk = f.read(4096)
 			f.close
+			c.send('EOF')
 		elif cmd == "put":
 			target = msg[1]
 			f = open(target,"wb");
 			print("file ok")
 			chunk = c.recv(4096)
-			while(chunk):
+			while(chunk != 'EOF'):
 				print("got stuff")
 				f.write(chunk)
+				c.send("ACK")
 				chunk = c.recv(4096)
 			f.close()
 		elif cmd == "terminate":

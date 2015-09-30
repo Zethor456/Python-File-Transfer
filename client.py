@@ -1,10 +1,13 @@
 import socket
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-socket.connect(('localhost',4040))
+server = ('localhost',4040)
+socket.connect(server)
+print "Connected to: ",server
 
 running = True
 while running:
-    raw_cmd = raw_input("Enter the command you want to send: ")
+    path = socket.recv(4096)
+    raw_cmd = raw_input(path+">")
     cmd = raw_cmd.split()
     if cmd[0] == "ls":
         socket.send(cmd[0])
@@ -15,32 +18,29 @@ while running:
     elif cmd[0] == "mkdir":
         socket.send(raw_cmd)
     elif cmd[0] == "get":
-        socket.send(cmd[0])
-        print(cmd[0])
-        socket.send(cmd[1])
-        print(cmd[1])
-        f = open("other.txt","wb")
+        print("Sending ",raw_cmd)
+        target = cmd[1]
+        f = open(target,"wb")
+        socket.send(raw_cmd)
         chunk = socket.recv(4096)
-        while(chunk):
+        while(chunk != "EOF"):
             print("got stuff")
             print(chunk)
             f.write(chunk)
+            socket.send("ACK")
             chunk = socket.recv(4096)
         f.close()
-        socket.recv(4096);
-        #socket.close
     elif cmd[0] == "put":
-        socket.send(cmd[0])
-        f = open("Test.txt","r")
+        f = open(cmd[1],"r")
+        socket.send(raw_cmd)
         chunk = f.read(4096)
         while(chunk):
             socket.send(chunk)
-            print("sent stuff")
+            if socket.recv(4096) != "ACK":
+                print "Failed transfer"
             chunk = f.read(4096)
         f.close
-        #socket.shutdown(socket.SHUT_WR)
-        print socket.recv(4096)
-        #socket.close
+        socket.send('EOF')
     elif cmd[0] == "exit":
         socket.send("terminate")
         socket.close()
