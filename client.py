@@ -1,14 +1,20 @@
+# File Transfer System
+# import socket API, as that is how we are handling and creating a
+# client/server relationship
 import socket
 socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server = ('localhost',4040)
+server = ('localhost',4040) # change localhost and 4040 to your IP and Port #
 socket.connect(server)
+
 print "Connected to: ",server
 
 running = True
 while running:
-    path = socket.recv(4096)
+    path = socket.recv(4096) # get the current directory from the server
     raw_cmd = raw_input(path+">")
     cmd = raw_cmd.split()
+
+    # we store the user input in a list
     if cmd[0] == "ls":
         socket.send(cmd[0])
         listElements = socket.recv(4096)
@@ -43,7 +49,8 @@ while running:
         socket.send('EOF')
     elif cmd[0] == "exit":
         socket.send("terminate")
-        socket.close()
+        socket.close() 
         running = False
     else:
         print ("Unkown command: "+cmd[0])
+        socket.send(cmd[0])

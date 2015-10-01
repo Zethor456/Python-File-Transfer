@@ -1,8 +1,11 @@
+# File Transfer System
+# import os as that is the API used to manipulate user directories
+# it is cross platform (as is the socket API)
 import socket
 import os
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-serversocket.bind(('localhost',4040))
+serversocket.bind(('localhost',4040)) # change localhost and 4040 to IP and PORT# of server
 serversocket.listen(5)
 
 
@@ -11,7 +14,7 @@ while True:
 	print 'Connected to ', addr
 	running = True
 	while running:
-		c.send(os.getcwd())
+		c.send(os.getcwd()) # client needs to get the current directory, so we send it here
 		raw_msg = c.recv(4096)
 		msg = raw_msg.split()
 		cmd = msg[0]
@@ -55,7 +58,7 @@ while True:
 				chunk = c.recv(4096)
 			f.close()
 		elif cmd == "terminate":
-			c.close()
+			c.close() 
 			running = False
 		else:
 			print("Received unkown cmd: "+cmd)
