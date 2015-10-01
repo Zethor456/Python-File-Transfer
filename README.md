@@ -1,7 +1,10 @@
 # COMP3203
 Created by:
+
 Eric Kemp
+
 Thomas Fraser
+
 Filip Todoric
 
 Requirments:
