@@ -16,6 +16,10 @@ while True:
 	while running:
 		c.send(os.getcwd()) # client needs to get the current directory, so we send it here
 		raw_msg = c.recv(4096)
+		if not raw_msg:
+			print "Client disconnected"
+			c.close()
+			break
 		msg = raw_msg.split()
 		cmd = msg[0]
 		print 'Received cmd ', cmd
