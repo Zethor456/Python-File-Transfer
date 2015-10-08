@@ -21,6 +21,7 @@ while running:
         socket.send(cmd[0])
         listElements = socket.recv(4096)
         print listElements
+        #print ("End ls")
     elif cmd[0] == "cd":
         socket.send(raw_cmd)
     elif cmd[0] == "mkdir":
@@ -57,3 +58,4 @@ while running:
     else:
         print ("Unkown command: "+cmd[0])
         socket.send(cmd[0])
+    socket.send("ACK")

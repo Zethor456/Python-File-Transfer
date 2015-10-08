@@ -67,3 +67,5 @@ while True:
 			running = False
 		else:
 			print("Received unkown cmd: "+cmd)
+		if c.recv(4096) != "ACK":
+                	print("Detected desynchronisation")
