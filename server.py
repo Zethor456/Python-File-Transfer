@@ -3,6 +3,7 @@
 # it is cross platform (as is the socket API)
 import socket
 import os
+import sys
 serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 serversocket.bind(('localhost',4040)) # change localhost and 4040 to IP and PORT# of server
@@ -40,15 +41,15 @@ while True:
 			os.mkdir(newDir)
 		elif cmd == "get":
 			target = msg[1]
-			f = open(target,"r");
+			f = open(target,"rb");
 			chunk = f.read(4096)
 			while(chunk):
-				print("sending stuff")
+				#print("sending stuff ",sys.getsizeof(chunk))
 				c.send(chunk)
 				if c.recv(4096) != "ACK":
 					print "Failed transfer"
 				chunk = f.read(4096)
-			f.close
+			f.close()
 			c.send('EOF')
 		elif cmd == "put":
 			target = msg[1]
