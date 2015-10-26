@@ -1,7 +1,9 @@
-# COMP3203
+# Python File Transfer system
 Created by: Eric Kemp, Thomas Fraser & Filip Todoric
 
-Requirments:
+
+
+Commands:
 
   - ls : print on the client window a listing of the contents of the current directory
 on the server machine.
